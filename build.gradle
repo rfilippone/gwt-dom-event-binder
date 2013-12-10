@@ -4,3 +4,15 @@ apply plugin: 'eclipse'
 repositories {
     mavenCentral()
 }
+
+dependencies {
+	compile 'com.google.gwt:gwt-dev:2.5.1'
+	compile 'com.google.gwt:gwt-user:2.5.1'
+}
+
+eclipse {
+    project {
+        natures 'com.google.gwt.eclipse.core.gwtNature'
+        natures 'org.springsource.ide.eclipse.gradle.core.nature'
+	}
+}
