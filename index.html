@@ -69,6 +69,37 @@ Let's refresh some ideas at the base of UiBinder.</p>
 </blockquote>
 
 <p><strong>The last sentence explains the limitation that this library is trying to remove.</strong></p>
+
+<h2>
+<a name="how-do-i-use-it" class="anchor" href="#how-do-i-use-it"><span class="octicon octicon-link"></span></a>How do I use it?</h2>
+
+<p>Easy - just decide the event that you want to handle and the DOM element that generates the event, register an handler methods for it, and that's all.</p>
+
+<h3>
+<a name="registering-dom-event-handlers" class="anchor" href="#registering-dom-event-handlers"><span class="octicon octicon-link"></span></a>Registering DOM event handlers</h3>
+
+<p>DOM event handlers are methods annotated with the @DomEventHandler annotation. It works the same way as @UiHandler - the name of the method is ignored, the argument to the method is checked to determine what type of event to handle, and the string parameter of the annotation is used to determine the DOM element. In order to get this to work, you must also define an DomEventBinder interface and invoke bindEventHandlers on it in the same way you would for a UiBinder. Here's an example:</p>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWidgetWorld</span> <span class="kd">extends</span> <span class="n">Composite</span> <span class="o">{</span>
+
+  <span class="kd">interface</span> <span class="nc">MyUiBinder</span> <span class="kd">extends</span> <span class="n">UiBinder</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">,</span> <span class="n">HelloWidgetWorld</span><span class="o">&gt;</span> <span class="o">{}</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="n">MyUiBinder</span> <span class="n">uiBinder</span> <span class="o">=</span> <span class="n">GWT</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">MyUiBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="kd">interface</span> <span class="nc">MyEventBinder</span> <span class="kd">extends</span> <span class="n">DomEventBinder</span><span class="o">&lt;</span><span class="n">HelloWidgetWorld</span><span class="o">&gt;</span> <span class="o">{}</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyEventBinder</span> <span class="n">eventBinder</span> <span class="o">=</span> <span class="n">GWT</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">MyEventBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="nd">@UiField</span> <span class="n">ButtonElement</span> <span class="n">button</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">HelloWidgetWorld</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">initWidget</span><span class="o">(</span><span class="n">uiBinder</span><span class="o">.</span><span class="na">createAndBindUi</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>
+  <span class="o">}</span>
+
+  <span class="nd">@DomEventHandler</span><span class="o">(</span><span class="s">"button"</span><span class="o">)</span>
+  <span class="kt">void</span> <span class="nf">handleClick</span><span class="o">(</span><span class="n">ClickEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Window</span><span class="o">.</span><span class="na">alert</span><span class="o">(</span><span class="s">"Hello, AJAX"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
       </section>
       <footer>
         <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
