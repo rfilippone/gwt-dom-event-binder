@@ -78,7 +78,7 @@ Let's refresh some ideas at the base of UiBinder.</p>
 <h3>
 <a name="registering-dom-event-handlers" class="anchor" href="#registering-dom-event-handlers"><span class="octicon octicon-link"></span></a>Registering DOM event handlers</h3>
 
-<p>DOM event handlers are methods annotated with the @DomEventHandler annotation. It works the same way as @UiHandler - the name of the method is ignored, the argument to the method is checked to determine what type of event to handle, and the string parameter of the annotation is used to determine the DOM element. In order to get this to work, you must also define an DomEventBinder interface and invoke bindEventHandlers on it in the same way you would for a UiBinder. Here's an example:</p>
+<p>DOM event handlers are methods annotated with the @DomEventHandler annotation. Registration of handlers works the same way as @UiHandler - the name of the method is ignored, the argument to the method is checked to determine what type of event to handle, and the string parameter of the annotation is used to determine the DOM element. In order to get this to work, you must also define an DomEventBinder interface and invoke bindEventHandlers on it in the same way you would for a UiBinder. Here's an example:</p>
 
 <div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWidgetWorld</span> <span class="kd">extends</span> <span class="n">Composite</span> <span class="o">{</span>
 
