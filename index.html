@@ -92,6 +92,7 @@ Let's refresh some ideas at the base of UiBinder.</p>
 
   <span class="kd">public</span> <span class="nf">HelloWidgetWorld</span><span class="o">()</span> <span class="o">{</span>
     <span class="n">initWidget</span><span class="o">(</span><span class="n">uiBinder</span><span class="o">.</span><span class="na">createAndBindUi</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>
+    <span class="n">eventBinder</span><span class="o">.</span><span class="na">bindEventHandlers</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
   <span class="o">}</span>
 
   <span class="nd">@DomEventHandler</span><span class="o">(</span><span class="s">"button"</span><span class="o">)</span>
