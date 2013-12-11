@@ -1,8 +1,30 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main {
+      resources.srcDirs = ["src/main/java"]
+    }
+}
+
+javadoc 
+{
+  excludes = ["com/webrippers/gwt/dom/event/gwt/rebind/binder"]    
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+ 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
 }
 
 dependencies {
@@ -15,4 +37,48 @@ eclipse {
         natures 'com.google.gwt.eclipse.core.gwtNature'
         natures 'org.springsource.ide.eclipse.gradle.core.nature'
 	}
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/tmp/myRepo/")
+            pom.project {
+                groupId = 'com.webrippers'
+                artifactId = 'gwt-dom-event-binder'
+                version = '0.0.1'
+            
+                name 'gwt-dom-event-binder'
+                packaging 'jar'
+                description 'GWT generator for handling dom events via annotations'
+                url 'https://github.com/rfilippone/gwt-dom-event-binder'
+                
+                scm {
+                    url 'scm:git@github.com:rfilippone/gwt-dom-event-binder.git'
+                    connection 'scm:git@github.com:rfilippone/gwt-dom-event-binder.git'
+                    developerConnection 'scm:git@github.com:rfilippone/gwt-dom-event-binder.git'
+                }
+                
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'rfilippone'
+                        name 'Roberto Filippone'
+                        email 'rfilippone@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
