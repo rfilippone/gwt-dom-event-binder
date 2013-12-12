@@ -1,7 +1,75 @@
-gwt-dom-event-binder
-====================
+##What is GWT DOM EventBinder?
+GWT's UiBinder is great in many ways. 
+Let's refresh some ideas at the base of UiBinder.
 
-GWT generator for handling dom events via annotations
+From the [UiBinder Overview](http://www.gwtproject.org/doc/latest/DevGuideUiBinder.html#Overview):
+> At heart, a GWT application is a web page. And when you're laying out a web page, writing HTML and CSS is the most natural way to get the job done. The UiBinder framework allows you to do exactly that: build your apps as HTML pages with GWT widgets sprinkled throughout them.
 
+And from the [Simple binding of event handlers](http://www.gwtproject.org/doc/latest/DevGuideUiBinder.html#Simple_binding):
+>One of UiBinder's goals is to reduce the tedium of building user interfaces in Java code, and few things in Java require more mind-numbing boilerplate than event handlers.
 
-http://rfilippone.github.io/gwt-dom-event-binder/
+> .....
+
+>In a UiBinder owner class, you can use the @UiHandler annotation to have all of that anonymous class nonsense written for you.
+
+>```java
+public class MyFoo extends Composite {
+  @UiField Button button;
+>
+  public MyFoo() {
+    initWidget(button);
+  }
+>
+  @UiHandler("button")
+  void handleClick(ClickEvent e) {
+    Window.alert("Hello, AJAX");
+  }
+}
+```
+>However, there is one limitation (at least for now): you can only use @UiHandler with events thrown by widget objects, not DOM elements. That is, &lt;g:Button&gt;, not &lt;button&gt;.
+
+**The last sentence explains the limitation that this library is trying to remove.**
+
+##How do I use it?
+Easy - just decide the event that you want to handle and the DOM element that generates the event, register an handler methods for it, and that's all.
+
+###Registering DOM event handlers
+DOM event handlers are methods annotated with the @DomEventHandler annotation. Registration of handlers works the same way as @UiHandler - the name of the method is ignored, the argument to the method is checked to determine what type of event to handle, and the string parameter of the annotation is used to determine the DOM element. In order to get this to work, you must also define an DomEventBinder interface and invoke bindEventHandlers on it in the same way you would for a UiBinder. Here's an example:
+```java
+public class HelloWidgetWorld extends Composite {
+
+  interface MyUiBinder extends UiBinder<Widget, HelloWidgetWorld> {}
+  private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+
+  interface MyEventBinder extends DomEventBinder<HelloWidgetWorld> {}
+  private final MyEventBinder eventBinder = GWT.create(MyEventBinder.class);
+
+  @UiField ButtonElement button;
+
+  public HelloWidgetWorld() {
+    initWidget(uiBinder.createAndBindUi(this));
+    eventBinder.bindEventHandlers(this);
+  }
+
+  @DomEventHandler("button")
+  void handleClick(ClickEvent e) {
+    Window.alert("Hello, AJAX");
+  }
+}
+```
+
+##How do I install it?
+If you're using Maven, you can add the following to your &lt;dependencies&gt; section:
+```xml
+<dependency>
+  <groupId>com.webrippers</groupId>
+  <artifactId>gwt-dom-event-binder</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+**Please Note: Maven is not yet available**
+
+You can also check out the source using git from [https://github.com/rfilippone/gwt-dom-event-binder.git](https://github.com/rfilippone/gwt-dom-event-binder.git) and build it yourself. Once you've installed DOM EventBinder, be sure to inherit the module in your .gwt.xml file like this:
+```xml
+<inherits name='com.webrippers.gwt.dom.event.DomEventBinder'/>
+```
