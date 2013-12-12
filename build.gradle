@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'eclipse'
 
 repositories {
@@ -44,10 +45,19 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
+
+signing {
+    sign configurations.archives
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://localhost/tmp/myRepo/")
+        	beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        	repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+              authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
             pom.project {
                 groupId = 'com.webrippers'
                 artifactId = 'gwt-dom-event-binder'
