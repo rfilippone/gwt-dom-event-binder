@@ -22,9 +22,35 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * This annotation marks a method to be automatically bound as an event handler for DOM events. 
+ * The annotation values must be declared in the "ui:field" template attribute of a DOM element.
+ * 
+ * The method will start receiving events after it is bound to the DOM using a {@link DomEventBinder}. 
+ * Only the parameter of the method is relevant; the name is ignored. 
+ * For example, the given method will be invoked whenever a user clicks on the DOM element with ui:field="MyElement":
+ * 
+ * <pre>
+ * {@literal @}DomEventHandler("myElement")
+ * void onUserAction(ClickEvent event) {
+ *   Window.alert("Hello World!");
+ * }
+ * </pre>
+ *
+ * Note that an {@link DomEventBinder} MUST be used to register these annotations,
+ * otherwise they will have no effect.
+ *
+ * @see DomEventBinder
+ * 
+ * @author rfilippone@gmail.com (Roberto Filippone)
+ *
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface DomEventHandler {
+	/**
+	 * The name of the DOM element to which the handler method will be bound
+	 */
     String[] value();
 }
