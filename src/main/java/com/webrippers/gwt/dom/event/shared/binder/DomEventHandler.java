@@ -25,11 +25,11 @@ import java.lang.annotation.Target;
 /**
  * This annotation marks a method to be automatically bound as an event handler for DOM events. 
  * The annotation values must be declared in the "ui:field" template attribute of a DOM element.
- * 
+ * <p>
  * The method will start receiving events after it is bound to the DOM using a {@link DomEventBinder}. 
  * Only the parameter of the method is relevant; the name is ignored. 
  * For example, the given method will be invoked whenever a user clicks on the DOM element with ui:field="MyElement":
- * 
+ * <p>
  * <pre>
  * {@literal @}DomEventHandler("myElement")
  * void onUserAction(ClickEvent event) {
