@@ -67,7 +67,6 @@ If you're using Maven, you can add the following to your &lt;dependencies&gt; se
   <version>0.0.1</version>
 </dependency>
 ```
-**Please Note: Maven is not yet available**
 
 You can also check out the source using git from [https://github.com/rfilippone/gwt-dom-event-binder.git](https://github.com/rfilippone/gwt-dom-event-binder.git) and build it yourself. Once you've installed DOM EventBinder, be sure to inherit the module in your .gwt.xml file like this:
 ```xml
