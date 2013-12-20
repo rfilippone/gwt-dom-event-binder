@@ -67,7 +67,7 @@ If you're using Maven, you can add the following to your &lt;dependencies&gt; se
   <version>0.0.2</version>
 </dependency>
 ```
-You can dowload directy the [jar](http://oss.sonatype.org/content/groups/public/com/webrippers/gwt-dom-event-binder/0.0.1/gwt-dom-event-binder-0.0.1.jar), or you can also check out the source using git from [https://github.com/rfilippone/gwt-dom-event-binder.git](https://github.com/rfilippone/gwt-dom-event-binder.git) and build it yourself. Once you've installed DOM EventBinder, be sure to inherit the module in your .gwt.xml file like this:
+You can dowload directy the [jar](https://oss.sonatype.org/content/repositories/releases/com/webrippers/gwt-dom-event-binder/0.0.2/gwt-dom-event-binder-0.0.2.jar), or you can also check out the source using git from [https://github.com/rfilippone/gwt-dom-event-binder.git](https://github.com/rfilippone/gwt-dom-event-binder.git) and build it yourself. Once you've installed DOM EventBinder, be sure to inherit the module in your .gwt.xml file like this:
 ```xml
 <inherits name='com.webrippers.gwt.dom.event.DomEventBinder'/>
 ```
