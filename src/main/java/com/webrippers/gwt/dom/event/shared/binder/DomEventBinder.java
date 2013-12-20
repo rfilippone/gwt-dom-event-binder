@@ -16,6 +16,7 @@
 
 package com.webrippers.gwt.dom.event.shared.binder;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 /**
@@ -54,6 +55,7 @@ public interface DomEventBinder<T> {
 	 * Connects DOM events to each event handler method on a target object.
 	 * After this method returns, whenever the DOM triggers an event, it
 	 * will call the handler with the same event type on the given target.
+	 * Is equivalent to bindEventHandlers(target, (IsWidget) target);
 	 * 
 	 * @param target
 	 *            class to search for {@link DomEventHandler}-annotated methods
@@ -62,4 +64,15 @@ public interface DomEventBinder<T> {
 	 *         via this call
 	 */
     public HandlerRegistration bindEventHandlers(T target);
+
+    /**
+	 * Connects DOM events to each event handler method on a target object.
+	 * After this method returns, whenever the DOM triggers an event, it
+	 * will call the handler with the same event type on the given target.
+     * 
+     * @param target class to search for {@link DomEventHandler}-annotated methods
+     * @param widget on which the event handlers will be att 
+     * @return
+     */
+    public HandlerRegistration bindEventHandlers(T target, IsWidget widget);
 }

@@ -36,6 +36,7 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -76,7 +77,7 @@ public class DomEventBinderGenerator extends Generator {
     }
 
     private void write_doBindEventHandlers(JClassType target, TypeOracle typeOracle, SourceWriter writer) {
-        writer.println("protected List<HandlerRegistration> doBindEventHandlers(final %s target) {", target.getQualifiedSourceName());
+        writer.println("protected List<HandlerRegistration> doBindEventHandlers(final %s target, IsWidget isWidget) {", target.getQualifiedSourceName());
         writer.indent();
         writer.println("List<HandlerRegistration> registrations = new LinkedList<HandlerRegistration>();");
 
@@ -99,7 +100,7 @@ public class DomEventBinderGenerator extends Generator {
 
                 JClassType handlerJClassType = paramJParameterizedType.getTypeArgs()[0];
 
-                writer.println("registrations.add(target.asWidget().addDomHandler(new " + paramJParameterizedType.getTypeArgs()[0].getParameterizedQualifiedSourceName() + "() {");
+                writer.println("registrations.add(isWidget.asWidget().addDomHandler(new " + paramJParameterizedType.getTypeArgs()[0].getParameterizedQualifiedSourceName() + "() {");
                 writer.indent();
                 writer.println(handlerJClassType.getOverridableMethods()[0].getReadableDeclaration(false, false, false, false, true) + " {");
                 writer.indent();
@@ -139,7 +140,7 @@ public class DomEventBinderGenerator extends Generator {
         composer.addImport(List.class.getCanonicalName());
         composer.addImport(Element.class.getCanonicalName());
         composer.addImport(HandlerRegistration.class.getCanonicalName());
-        composer.addImport(AbstractDomEventBinder.class.getCanonicalName());
+        composer.addImport(IsWidget.class.getCanonicalName());
 
         PrintWriter printWriter = context.tryCreate(logger, packageName, simpleName);
         return (printWriter != null) ? composer.createSourceWriter(context, printWriter) : null;

@@ -3,6 +3,9 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'eclipse'
 
+version='0.0.2'
+
+
 repositories {
     mavenCentral()
 }
@@ -18,8 +21,13 @@ jar {
 }
 
 javadoc 
-{
-  excludes = ["com/webrippers/gwt/dom/event/gwt/rebind/binder", "com/webrippers/gwt/dom/event/shared/binder/impl"]    
+{  
+  options.addStringOption("sourcepath", "src/main/java")
+  excludes = ["com/webrippers/gwt/dom/event/gwt/rebind/binder/*", "com/webrippers/gwt/dom/event/shared/binder/impl/*"]
+  project.configure(options) {
+	linkSource = true
+	links("http://google-web-toolkit.googlecode.com/svn/javadoc/latest")
+  }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -60,9 +68,8 @@ install {
 			pom.project {
 			    groupId = 'com.webrippers'
 			    artifactId = 'gwt-dom-event-binder'
-			    version = '0.0.1'
 			
-			    name 'gwt-dom-event-binder'
+				name 'gwt-dom-event-binder'
 			    packaging 'jar'
 			    description 'GWT generator for handling dom events via annotations'
 			    url 'https://github.com/rfilippone/gwt-dom-event-binder'

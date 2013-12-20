@@ -18,6 +18,7 @@ package com.webrippers.gwt.dom.event.shared.binder.impl;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.webrippers.gwt.dom.event.shared.binder.DomEventBinder;
 
@@ -25,7 +26,12 @@ public abstract class AbstractDomEventBinder<T> implements DomEventBinder<T> {
 
     @Override
     public final HandlerRegistration bindEventHandlers(T target) {
-        final List<HandlerRegistration> registrations = doBindEventHandlers(target);
+    	return bindEventHandlers(target, (IsWidget) target);
+    }
+
+    @Override
+    public HandlerRegistration bindEventHandlers(T target, IsWidget isWidget) {
+        final List<HandlerRegistration> registrations = doBindEventHandlers(target, isWidget);
         return new HandlerRegistration() {
             @Override
             public void removeHandler() {
@@ -36,9 +42,9 @@ public abstract class AbstractDomEventBinder<T> implements DomEventBinder<T> {
             }
         };
     }
-
+    
     /**
      * Implemented by DOMEventBinderGenerator to do the actual work of binding event handlers on the target.
      */
-    protected abstract List<HandlerRegistration> doBindEventHandlers(T target);
+    protected abstract List<HandlerRegistration> doBindEventHandlers(T target, IsWidget widget);
 }
