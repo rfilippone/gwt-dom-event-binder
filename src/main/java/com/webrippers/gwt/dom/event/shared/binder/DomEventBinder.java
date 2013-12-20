@@ -71,8 +71,11 @@ public interface DomEventBinder<T> {
 	 * will call the handler with the same event type on the given target.
      * 
      * @param target class to search for {@link DomEventHandler}-annotated methods
-     * @param widget on which the event handlers will be att 
-     * @return
+     * 
+     * @param widget on which the event handlers will be attached
+     *  
+     * @return a registration that can be used to unbind all handlers registered
+	 *         via this call
      */
     public HandlerRegistration bindEventHandlers(T target, IsWidget widget);
 }
