@@ -16,8 +16,6 @@
 
 package com.webrippers.gwt.dom.event.gwt.rebind.binder;
 
-import static com.google.gwt.dev.util.Preconditions.checkArgument;
-
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
@@ -123,8 +121,13 @@ public class DomEventBinderGenerator extends Generator {
 
     private JClassType getTargetType(JClassType interfaceType, TypeOracle typeOracle) {
         JClassType[] superTypes = interfaceType.getImplementedInterfaces();
-        checkArgument(superTypes.length == 1 && superTypes[0].isAssignableFrom(typeOracle.findType(DomEventBinder.class.getCanonicalName())) && superTypes[0].isParameterized() != null, interfaceType
-                + " must extend DomEventBinder with a type parameter");
+        JClassType domEventBinderType = typeOracle.findType(DomEventBinder.class.getCanonicalName());
+        if (superTypes.length != 1
+            || !superTypes[0].isAssignableFrom(domEventBinderType)
+            || superTypes[0].isParameterized() == null
+        ) {
+            throw new IllegalArgumentException(interfaceType + " must extend DomEventBinder with a type parameter");
+        }
         return superTypes[0].isParameterized().getTypeArgs()[0];
     }
 
