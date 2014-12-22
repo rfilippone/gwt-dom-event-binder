@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 webrippers.com
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -15,8 +15,6 @@
  */
 
 package com.webrippers.gwt.dom.event.gwt.rebind.binder;
-
-import static com.google.gwt.dev.util.Preconditions.checkArgument;
 
 import java.io.PrintWriter;
 import java.util.LinkedList;
@@ -46,13 +44,13 @@ import com.webrippers.gwt.dom.event.shared.binder.impl.AbstractDomEventBinder;
 
 /**
  * @author FirstName LastName
- * 
+ *
  */
 public class DomEventBinderGenerator extends Generator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.google.gwt.core.ext.Generator#generate(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.GeneratorContext, java.lang.String)
      */
     @Override
@@ -65,7 +63,7 @@ public class DomEventBinderGenerator extends Generator {
             SourceWriter writer = createSourceWriter(logger, context, eventBinderType, targetType);
             if (writer != null) {
 
-                write_doBindEventHandlers(targetType, typeOracle, writer);
+                write_doBindEventHandlers(targetType, typeOracle, writer, logger);
 
                 writer.commit(logger);
             }
@@ -76,7 +74,7 @@ public class DomEventBinderGenerator extends Generator {
         }
     }
 
-    private void write_doBindEventHandlers(JClassType target, TypeOracle typeOracle, SourceWriter writer) {
+    private void write_doBindEventHandlers(JClassType target, TypeOracle typeOracle, SourceWriter writer, TreeLogger logger) {
         writer.println("protected List<HandlerRegistration> doBindEventHandlers(final %s target, IsWidget isWidget) {", target.getQualifiedSourceName());
         writer.indent();
         writer.println("List<HandlerRegistration> registrations = new LinkedList<HandlerRegistration>();");
@@ -104,11 +102,20 @@ public class DomEventBinderGenerator extends Generator {
                 writer.indent();
                 writer.println(handlerJClassType.getOverridableMethods()[0].getReadableDeclaration(false, false, false, false, true) + " {");
                 writer.indent();
-                writer.println("if (Element.as(event.getNativeEvent().getEventTarget()) == target." + annotation.value()[0] + ") {");
-                writer.indent();
-                writer.println("target." + method.getName() + "(event);");
-                writer.outdent();
-                writer.println("}");
+                if (annotation.value().length > 0) {
+                    writer.println("Element targetElement = Element.as(event.getNativeEvent().getEventTarget());");
+                    if (annotation.value()[0].startsWith("!")) {
+                        writer.println("if (targetElement != target." + annotation.value()[0].substring(1) + ") {");
+                    } else {
+                        writer.println("if (targetElement == target." + annotation.value()[0] + ") {");
+                    }
+                    writer.indent();
+                    writer.println("target." + method.getName() + "(event);");
+                    writer.outdent();
+                    writer.println("}");
+                } else {
+                    writer.println("target." + method.getName() + "(event);");
+                }
                 writer.outdent();
                 writer.println("}");
                 writer.outdent();
@@ -123,8 +130,13 @@ public class DomEventBinderGenerator extends Generator {
 
     private JClassType getTargetType(JClassType interfaceType, TypeOracle typeOracle) {
         JClassType[] superTypes = interfaceType.getImplementedInterfaces();
-        checkArgument(superTypes.length == 1 && superTypes[0].isAssignableFrom(typeOracle.findType(DomEventBinder.class.getCanonicalName())) && superTypes[0].isParameterized() != null, interfaceType
-                + " must extend DomEventBinder with a type parameter");
+        JClassType domEventBinderType = typeOracle.findType(DomEventBinder.class.getCanonicalName());
+        if (superTypes.length != 1
+            || !superTypes[0].isAssignableFrom(domEventBinderType)
+            || superTypes[0].isParameterized() == null
+        ) {
+            throw new IllegalArgumentException(interfaceType + " must extend DomEventBinder with a type parameter");
+        }
         return superTypes[0].isParameterized().getTypeArgs()[0];
     }
 
