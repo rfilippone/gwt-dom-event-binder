@@ -56,5 +56,5 @@ public @interface DomEventHandler {
 	 *
 	 * @return {@link String} the DOM element name
 	 */
-    String[] value();
+    String[] value() default {};
 }
